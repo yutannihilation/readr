@@ -72,6 +72,12 @@ test_that("encoding affects text and headers", {
   expect_identical(x[[1]], "\u00e9l\u00e8ve")
 })
 
+test_that("non-UTF-8 characters are encoded properly", {
+  test_string <- "a\n\u597d"
+  x <- read_csv(enc2native(test_string), progress = FALSE)
+  expect_identical(x$a, "\u597d")
+})
+
 test_that("nuls are dropped with a warning", {
   expect_warning(x <- read_csv("raw.csv", progress = FALSE))
   expect_equal(n_problems(x), 1)
