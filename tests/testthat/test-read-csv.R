@@ -73,15 +73,15 @@ test_that("encoding affects text and headers", {
 })
 
 test_that("non-UTF-8 characters are encoded properly", {
-  as_utf8_raw <- function(x) as.raw(enc2utf8(x))
-
   test_string <- "a\n\u597d"
   x <- read_csv(enc2native(test_string), progress = FALSE)
-  expect_identical(as_utf8_raw(x$a), as_utf8_raw("\u597d"))
+  expect_identical(Encoding(x$a), "UTF-8")
+  expect_identical(x$a, "\u597d")
 
   test_string2 <- rawToChar(as.raw(c(0x61,0x0a,0x94,0x45,0x8e,0xd2)))
   y <- read_csv(test_string2, locale = locale(encoding = "Shift_JIS"), progress = FALSE)
-  expect_identical(as_utf8_raw(y$a), as_utf8_raw("\u5fcd\u8005"))
+  expect_identical(Encoding(y$a), "UTF-8")
+  expect_identical(y$a, "\u5fcd\u8005")
 })
 
 test_that("nuls are dropped with a warning", {
