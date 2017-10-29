@@ -76,6 +76,10 @@ test_that("non-UTF-8 characters are encoded properly", {
   test_string <- "a\n\u597d"
   x <- read_csv(enc2native(test_string), progress = FALSE)
   expect_identical(x$a, "\u597d")
+
+  test_string2 <- rawToChar(as.raw(c(0x61,0x0a,0x94,0x45,0x8e,0xd2)))
+  y <- read_csv(test_string2, locale = locale(encoding = "Shift_JIS"), progress = FALSE)
+  expect_identical(y, "\u5fcd\u8005")
 })
 
 test_that("nuls are dropped with a warning", {
